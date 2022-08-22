@@ -14,6 +14,9 @@ defmodule TodoList do
     ["Exercise","Eat","Code","Sleep"]
   end
 
+  def add_task(taskList, task) do
+    List.insert_at(taskList,-1,task)
+  end
   def complete_task(taskList, task) do
     if contains?(taskList, task) do
       List.delete(taskList,task)
