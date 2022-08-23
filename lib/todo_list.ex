@@ -17,6 +17,7 @@ defmodule TodoList do
   def add_task(taskList, task) do
     List.insert_at(taskList,-1,task)
   end
+
   def complete_task(taskList, task) do
     if contains?(taskList, task) do
       List.delete(taskList,task)
@@ -38,5 +39,18 @@ defmodule TodoList do
     for task <- taskList, String.contains?(task, word) do
       task
     end
+  end
+
+  #Saving our Task List in a file
+  def save(taskList, filename) do
+    #for this, we need to convert our list into a form that can be wriiten in our file system
+    binary = :erlang.term_to_binary(taskList)
+    File.write(filename, binary)
+  end
+
+  #Reading our saved TaskList
+  def read(filename) do
+    {_status, binary} = File.read(filename)
+    :erlang.binary_to_term(binary)
   end
 end
