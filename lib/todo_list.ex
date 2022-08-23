@@ -1,8 +1,5 @@
 defmodule TodoList do
   def create_list do
-    # tasks = IO.gets("Enter the number of tasks: ")
-    # {no_of_tasks, _q}= Integer.parse(tasks)
-    # no_of_tasks
     {tasks,_q} = IO.gets("Enter the number of tasks: ") |> Integer.parse()
     for _ <- 1..tasks do
       IO.gets("Enter your task: ") |> String.trim()
@@ -14,10 +11,12 @@ defmodule TodoList do
     ["Exercise","Eat","Code","Sleep"]
   end
 
+  #Add tasks in the list
   def add_task(taskList, task) do
     List.insert_at(taskList,-1,task)
   end
 
+  #Removes tasks from the list which are completed.
   def complete_task(taskList, task) do
     if contains?(taskList, task) do
       List.delete(taskList,task)
@@ -26,15 +25,18 @@ defmodule TodoList do
     end
   end
 
+  #Checks if the given taskList contains a particular task
   def contains?(taskList,task) do
     Enum.member?(taskList,task)
   end
 
+  #Randomly selects any task from the given list
   def random_select(taskList) do
     [task]= Enum.take_random(taskList,1)
     task
   end
 
+  #Search for a particular keyword in a task
   def keyword_search(taskList,word) do
     for task <- taskList, String.contains?(task, word) do
       task
@@ -50,7 +52,9 @@ defmodule TodoList do
 
   #Reading our saved TaskList
   def read(filename) do
-    {_status, binary} = File.read(filename)
-    :erlang.binary_to_term(binary)
+    case File.read(filename) do
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      {:error, _ } -> "File does not exist"
+    end
   end
 end
